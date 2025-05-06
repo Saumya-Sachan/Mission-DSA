@@ -1,0 +1,24 @@
+class Solution {
+    public int leastInterval(char[] tasks, int n) {
+        Map<Character,Integer> mp= new HashMap<>();
+        for (char task:tasks){
+            mp.put(task,mp.getOrDefault(task,0)+1);
+        }
+        PriorityQueue<Integer> maxHeap=new PriorityQueue<>(Collections.reverseOrder());
+        maxHeap.addAll(mp.values());
+        Queue<int[]> timer=new LinkedList<>();
+        int time=0;
+        while(!maxHeap.isEmpty()||!timer.isEmpty()){
+            time++;
+            if (!maxHeap.isEmpty()){
+                int count=maxHeap.poll()-1;
+                if (count>0)
+                timer.add(new int[]{count,time+n});
+            }
+            if (!timer.isEmpty()&&timer.peek()[1]==time){
+                maxHeap.add(timer.poll()[0]);
+            }
+        }
+        return time;
+    }
+}
